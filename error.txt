@@ -4,12 +4,12 @@ WARNING: Illegal reflective access by org.apache.flink.api.java.ClosureCleaner (
 WARNING: Please consider reporting this to the maintainers of org.apache.flink.api.java.ClosureCleaner
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-Job has been submitted with JobID efe383d27c7bde6d5cc53277e1784dbd
+Job has been submitted with JobID 4ff17b916ff8a670dbe71852415438eb
 
 ------------------------------------------------------------
  The program finished with the following exception:
 
-org.apache.flink.client.program.ProgramInvocationException: The main method caused an error: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: efe383d27c7bde6d5cc53277e1784dbd)
+org.apache.flink.client.program.ProgramInvocationException: The main method caused an error: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 4ff17b916ff8a670dbe71852415438eb)
         at org.apache.flink.client.program.PackagedProgram.callMainMethod(PackagedProgram.java:372)
         at org.apache.flink.client.program.PackagedProgram.invokeInteractiveModeForExecution(PackagedProgram.java:222)
         at org.apache.flink.client.ClientUtils.executeProgram(ClientUtils.java:105)
@@ -20,7 +20,7 @@ org.apache.flink.client.program.ProgramInvocationException: The main method caus
         at org.apache.flink.runtime.security.contexts.NoOpSecurityContext.runSecured(NoOpSecurityContext.java:28)
         at org.apache.flink.client.cli.CliFrontend.mainInternal(CliFrontend.java:1189)
         at org.apache.flink.client.cli.CliFrontend.main(CliFrontend.java:1157)
-Caused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: efe383d27c7bde6d5cc53277e1784dbd)
+Caused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 4ff17b916ff8a670dbe71852415438eb)
         at java.base/java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
         at java.base/java.util.concurrent.CompletableFuture.get(Unknown Source)
         at org.apache.flink.client.program.StreamContextEnvironment.getJobExecutionResult(StreamContextEnvironment.java:171)
@@ -33,7 +33,7 @@ Caused by: java.util.concurrent.ExecutionException: org.apache.flink.client.prog
         at java.base/java.lang.reflect.Method.invoke(Unknown Source)
         at org.apache.flink.client.program.PackagedProgram.callMainMethod(PackagedProgram.java:355)
         ... 9 more
-Caused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: efe383d27c7bde6d5cc53277e1784dbd)
+Caused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 4ff17b916ff8a670dbe71852415438eb)
         at org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:130)
         at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(Unknown Source)
         at java.base/java.util.concurrent.CompletableFuture.postComplete(Unknown Source)
@@ -103,7 +103,7 @@ Caused by: org.apache.flink.runtime.JobException: Recovery is suppressed by NoRe
         at java.base/java.util.concurrent.ForkJoinPool.scan(Unknown Source)
         at java.base/java.util.concurrent.ForkJoinPool.runWorker(Unknown Source)
         at java.base/java.util.concurrent.ForkJoinWorkerThread.run(Unknown Source)
-Caused by: java.io.FileNotFoundException: geolite/GeoLite2-ASN.mmdb (No such file or directory)
+Caused by: java.io.FileNotFoundException: opt/flink/geolite/GeoLite2-ASN.mmdb (No such file or directory)
         at java.base/java.io.RandomAccessFile.open0(Native Method)
         at java.base/java.io.RandomAccessFile.open(Unknown Source)
         at java.base/java.io.RandomAccessFile.<init>(Unknown Source)
@@ -126,4 +126,11 @@ Caused by: java.io.FileNotFoundException: geolite/GeoLite2-ASN.mmdb (No such fil
         at org.apache.flink.runtime.taskmanager.Task.doRun(Task.java:745)
         at org.apache.flink.runtime.taskmanager.Task.run(Task.java:562)
         at java.base/java.lang.Thread.run(Unknown Source)
-[root@cheux37oracleos7 kcg]#
+[root@cheux37oracleos7 kcg]# docker exec -it kcg-jobmanager-1 /bin/bash
+root@8fe31d720f1b:/opt/flink# ls
+bin  conf  examples  geolite  lib  LICENSE  licenses  log  NOTICE  opt  plugins  README.txt  usrlib
+root@8fe31d720f1b:/opt/flink# cd geolite
+root@8fe31d720f1b:/opt/flink/geolite# ls
+GeoLite2-ASN-Blocks-IPv4.csv  GeoLite2-City-Blocks-IPv4.csv  GeoLite2-Country.mmdb
+GeoLite2-ASN.mmdb             GeoLite2-City.mmdb             IP2LOCATION-LITE-DB1.csv
+root@8fe31d720f1b:/opt/flink/geolite#
