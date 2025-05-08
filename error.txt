@@ -1,50 +1,129 @@
-[root@cheux37oracleos7 flink-job]# tail -n 100 build.log
-[INFO] Scanning for projects...
-[INFO]
-[INFO] -----------------< com.example:flink-kafka-enrichment >-----------------
-[INFO] Building flink-kafka-enrichment 1.0
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ flink-kafka-enrichment ---
-[INFO] Deleting /home/root/new_dir/goflow2/compose/kcg/flink-job/target
-[INFO]
-[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ flink-kafka-enrichment ---
-[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-[INFO] skip non existing resourceDirectory /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/resources
-[INFO]
-[INFO] --- maven-compiler-plugin:3.10.1:compile (default-compile) @ flink-kafka-enrichment ---
-[INFO] Changes detected - recompiling the module!
-[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[INFO] Compiling 1 source file to /home/root/new_dir/goflow2/compose/kcg/flink-job/target/classes
-[INFO] -------------------------------------------------------------
-[WARNING] COMPILATION WARNING :
-[INFO] -------------------------------------------------------------
-[WARNING] /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/java/com/example/KafkaFlinkEnrichmentJob.java:[33,9] org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer in org.apache.flink.streaming.connectors.kafka has been deprecated
-[WARNING] /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/java/com/example/KafkaFlinkEnrichmentJob.java:[33,51] org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer in org.apache.flink.streaming.connectors.kafka has been deprecated
-[WARNING] /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/java/com/example/KafkaFlinkEnrichmentJob.java:[40,9] org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer in org.apache.flink.streaming.connectors.kafka has been deprecated
-[WARNING] /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/java/com/example/KafkaFlinkEnrichmentJob.java:[40,51] org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer in org.apache.flink.streaming.connectors.kafka has been deprecated
-[INFO] 4 warnings
-[INFO] -------------------------------------------------------------
-[INFO] -------------------------------------------------------------
-[ERROR] COMPILATION ERROR :
-[INFO] -------------------------------------------------------------
-[ERROR] /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/java/com/example/KafkaFlinkEnrichmentJob.java:[56,9] method does not override or implement a method from a supertype
-[INFO] 1 error
-[INFO] -------------------------------------------------------------
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 2.433 s
-[INFO] Finished at: 2025-05-08T10:07:32Z
-[INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile (default-compile) on project flink-kafka-enrichment: Compilation failure
-[ERROR] /home/root/new_dir/goflow2/compose/kcg/flink-job/src/main/java/com/example/KafkaFlinkEnrichmentJob.java:[56,9] method does not override or implement a method from a supertype
-[ERROR]
-[ERROR] -> [Help 1]
-[ERROR]
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR]
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
-[root@cheux37oracleos7 flink-job]#
+[root@cheux37oracleos7 kcg]# docker exec -it kcg-jobmanager-1 flink run /opt/flink/usrlib/flink-kafka-enrichment-1.0.jar
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.flink.api.java.ClosureCleaner (file:/opt/flink/lib/flink-dist-1.17.1.jar) to field java.util.Properties.serialVersionUID
+WARNING: Please consider reporting this to the maintainers of org.apache.flink.api.java.ClosureCleaner
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+Job has been submitted with JobID efe383d27c7bde6d5cc53277e1784dbd
+
+------------------------------------------------------------
+ The program finished with the following exception:
+
+org.apache.flink.client.program.ProgramInvocationException: The main method caused an error: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: efe383d27c7bde6d5cc53277e1784dbd)
+        at org.apache.flink.client.program.PackagedProgram.callMainMethod(PackagedProgram.java:372)
+        at org.apache.flink.client.program.PackagedProgram.invokeInteractiveModeForExecution(PackagedProgram.java:222)
+        at org.apache.flink.client.ClientUtils.executeProgram(ClientUtils.java:105)
+        at org.apache.flink.client.cli.CliFrontend.executeProgram(CliFrontend.java:851)
+        at org.apache.flink.client.cli.CliFrontend.run(CliFrontend.java:245)
+        at org.apache.flink.client.cli.CliFrontend.parseAndRun(CliFrontend.java:1095)
+        at org.apache.flink.client.cli.CliFrontend.lambda$mainInternal$9(CliFrontend.java:1189)
+        at org.apache.flink.runtime.security.contexts.NoOpSecurityContext.runSecured(NoOpSecurityContext.java:28)
+        at org.apache.flink.client.cli.CliFrontend.mainInternal(CliFrontend.java:1189)
+        at org.apache.flink.client.cli.CliFrontend.main(CliFrontend.java:1157)
+Caused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: efe383d27c7bde6d5cc53277e1784dbd)
+        at java.base/java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.get(Unknown Source)
+        at org.apache.flink.client.program.StreamContextEnvironment.getJobExecutionResult(StreamContextEnvironment.java:171)
+        at org.apache.flink.client.program.StreamContextEnvironment.execute(StreamContextEnvironment.java:122)
+        at org.apache.flink.streaming.api.environment.StreamExecutionEnvironment.execute(StreamExecutionEnvironment.java:2058)
+        at com.example.KafkaFlinkEnrichmentJob.main(KafkaFlinkEnrichmentJob.java:49)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+        at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+        at org.apache.flink.client.program.PackagedProgram.callMainMethod(PackagedProgram.java:355)
+        ... 9 more
+Caused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: efe383d27c7bde6d5cc53277e1784dbd)
+        at org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:130)
+        at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.postComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.complete(Unknown Source)
+        at org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$6(FutureUtils.java:302)
+        at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.postComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.complete(Unknown Source)
+        at org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$32(RestClusterClient.java:787)
+        at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.postComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.complete(Unknown Source)
+        at org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$6(FutureUtils.java:302)
+        at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.postComplete(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture.postFire(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(Unknown Source)
+        at java.base/java.util.concurrent.CompletableFuture$Completion.run(Unknown Source)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+        at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: org.apache.flink.runtime.client.JobExecutionException: Job execution failed.
+        at org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:144)
+        at org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:128)
+        ... 23 more
+Caused by: org.apache.flink.runtime.JobException: Recovery is suppressed by NoRestartBackoffTimeStrategy
+        at org.apache.flink.runtime.executiongraph.failover.flip1.ExecutionFailureHandler.handleFailure(ExecutionFailureHandler.java:139)
+        at org.apache.flink.runtime.executiongraph.failover.flip1.ExecutionFailureHandler.getFailureHandlingResult(ExecutionFailureHandler.java:83)
+        at org.apache.flink.runtime.scheduler.DefaultScheduler.recordTaskFailure(DefaultScheduler.java:258)
+        at org.apache.flink.runtime.scheduler.DefaultScheduler.handleTaskFailure(DefaultScheduler.java:249)
+        at org.apache.flink.runtime.scheduler.DefaultScheduler.onTaskFailed(DefaultScheduler.java:242)
+        at org.apache.flink.runtime.scheduler.SchedulerBase.onTaskExecutionStateUpdate(SchedulerBase.java:748)
+        at org.apache.flink.runtime.scheduler.SchedulerBase.updateTaskExecutionState(SchedulerBase.java:725)
+        at org.apache.flink.runtime.scheduler.SchedulerNG.updateTaskExecutionState(SchedulerNG.java:80)
+        at org.apache.flink.runtime.jobmaster.JobMaster.updateTaskExecutionState(JobMaster.java:479)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+        at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+        at org.apache.flink.runtime.rpc.akka.AkkaRpcActor.lambda$handleRpcInvocation$1(AkkaRpcActor.java:309)
+        at org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:83)
+        at org.apache.flink.runtime.rpc.akka.AkkaRpcActor.handleRpcInvocation(AkkaRpcActor.java:307)
+        at org.apache.flink.runtime.rpc.akka.AkkaRpcActor.handleRpcMessage(AkkaRpcActor.java:222)
+        at org.apache.flink.runtime.rpc.akka.FencedAkkaRpcActor.handleRpcMessage(FencedAkkaRpcActor.java:84)
+        at org.apache.flink.runtime.rpc.akka.AkkaRpcActor.handleMessage(AkkaRpcActor.java:168)
+        at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+        at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+        at scala.PartialFunction.applyOrElse(PartialFunction.scala:127)
+        at scala.PartialFunction.applyOrElse$(PartialFunction.scala:126)
+        at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+        at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:175)
+        at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:176)
+        at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:176)
+        at akka.actor.Actor.aroundReceive(Actor.scala:537)
+        at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+        at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+        at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+        at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+        at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+        at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+        at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+        at java.base/java.util.concurrent.ForkJoinTask.doExec(Unknown Source)
+        at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(Unknown Source)
+        at java.base/java.util.concurrent.ForkJoinPool.scan(Unknown Source)
+        at java.base/java.util.concurrent.ForkJoinPool.runWorker(Unknown Source)
+        at java.base/java.util.concurrent.ForkJoinWorkerThread.run(Unknown Source)
+Caused by: java.io.FileNotFoundException: geolite/GeoLite2-ASN.mmdb (No such file or directory)
+        at java.base/java.io.RandomAccessFile.open0(Native Method)
+        at java.base/java.io.RandomAccessFile.open(Unknown Source)
+        at java.base/java.io.RandomAccessFile.<init>(Unknown Source)
+        at java.base/java.io.RandomAccessFile.<init>(Unknown Source)
+        at com.maxmind.db.BufferHolder.<init>(BufferHolder.java:20)
+        at com.maxmind.db.Reader.<init>(Reader.java:117)
+        at com.maxmind.geoip2.DatabaseReader.<init>(DatabaseReader.java:91)
+        at com.maxmind.geoip2.DatabaseReader.<init>(DatabaseReader.java:62)
+        at com.maxmind.geoip2.DatabaseReader$Builder.build(DatabaseReader.java:216)
+        at com.example.KafkaFlinkEnrichmentJob$EnrichmentFunction.open(KafkaFlinkEnrichmentJob.java:59)
+        at org.apache.flink.api.common.functions.util.FunctionUtils.openFunction(FunctionUtils.java:34)
+        at org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator.open(AbstractUdfStreamOperator.java:101)
+        at org.apache.flink.streaming.runtime.tasks.RegularOperatorChain.initializeStateAndOpenOperators(RegularOperatorChain.java:107)
+        at org.apache.flink.streaming.runtime.tasks.StreamTask.restoreGates(StreamTask.java:734)
+        at org.apache.flink.streaming.runtime.tasks.StreamTaskActionExecutor$SynchronizedStreamTaskActionExecutor.call(StreamTaskActionExecutor.java:100)
+        at org.apache.flink.streaming.runtime.tasks.StreamTask.restoreInternal(StreamTask.java:709)
+        at org.apache.flink.streaming.runtime.tasks.StreamTask.restore(StreamTask.java:675)
+        at org.apache.flink.runtime.taskmanager.Task.runWithSystemExitMonitoring(Task.java:952)
+        at org.apache.flink.runtime.taskmanager.Task.restoreAndInvoke(Task.java:921)
+        at org.apache.flink.runtime.taskmanager.Task.doRun(Task.java:745)
+        at org.apache.flink.runtime.taskmanager.Task.run(Task.java:562)
+        at java.base/java.lang.Thread.run(Unknown Source)
+[root@cheux37oracleos7 kcg]#
