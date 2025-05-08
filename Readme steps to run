@@ -1,0 +1,10 @@
+# Step 1: Build the Java job
+cd flink-kafka-enrichment/flink-job
+mvn clean package
+
+# Step 2: Start the stack
+cd ..
+docker-compose up -d
+
+# Step 3: Submit the job
+docker exec -it <jobmanager_container_id> flink run /opt/flink/usrlib/flink-kafka-enrichment-1.0.jar
