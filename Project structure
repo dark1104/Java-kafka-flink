@@ -1,0 +1,5 @@
+flink-kafka-enrichment/
+├── docker-compose.yml
+├── flink-job/
+│   ├── pom.xml
+│   └── src/main/java/com/example/KafkaFlinkEnrichmentJob.java
