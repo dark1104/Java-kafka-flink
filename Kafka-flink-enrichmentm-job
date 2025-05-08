@@ -1,0 +1,37 @@
+package com.example;
+
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+
+import java.util.Properties;
+
+public class KafkaFlinkEnrichmentJob {
+    public static void main(String[] args) throws Exception {
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        Properties props = new Properties();
+        props.setProperty("bootstrap.servers", "kafka:9092");
+        props.setProperty("group.id", "flink-java-consumer");
+
+        FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<>("flows", new SimpleStringSchema(), props);
+        consumer.setStartFromEarliest();
+
+        DataStream<String> input = env.addSource(consumer);
+
+        DataStream<String> enriched = input.map((MapFunction<String, String>) value -> value + "_enriched");
+
+        FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<>(
+            "enriched-flows",
+            new SimpleStringSchema(),
+            props
+        );
+
+        enriched.addSink(producer);
+
+        env.execute("Kafka Flink Enrichment Java Job");
+    }
+}
