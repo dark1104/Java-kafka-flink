@@ -1,20 +1,34 @@
 package com.example;
 
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.CountryResponse;
+import com.maxmind.geoip2.model.AsnResponse;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 public class KafkaFlinkEnrichmentJob {
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", "kafka:9092");
+        props.setProperty("bootstrap.servers", "192.168.91.37:9092");
         props.setProperty("group.id", "flink-java-consumer");
 
         FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<>("flows", new SimpleStringSchema(), props);
@@ -22,16 +36,76 @@ public class KafkaFlinkEnrichmentJob {
 
         DataStream<String> input = env.addSource(consumer);
 
-        DataStream<String> enriched = input.map((MapFunction<String, String>) value -> value + "_enriched");
+        DataStream<String> enriched = input.map(new EnrichmentFunction());
 
         FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<>(
-            "enriched-flows",
-            new SimpleStringSchema(),
-            props
+                "enriched-flows",
+                new SimpleStringSchema(),
+                props
         );
 
         enriched.addSink(producer);
 
         env.execute("Kafka Flink Enrichment Java Job");
+    }
+
+    public static class EnrichmentFunction extends RichMapFunction<String, String> {
+        private transient DatabaseReader asnReader;
+        private transient DatabaseReader cityReader;
+        private transient DatabaseReader countryReader;
+
+        @Override
+        public void open(org.apache.flink.configuration.Configuration parameters) throws Exception {
+            asnReader = new DatabaseReader.Builder(new File("/opt/flink/geolite/GeoLite2-ASN.mmdb")).build();
+            cityReader = new DatabaseReader.Builder(new File("/opt/flink/geolite/GeoLite2-City.mmdb")).build();
+            countryReader = new DatabaseReader.Builder(new File("/opt/flink/geolite/GeoLite2-Country.mmdb")).build();
+        }
+
+        @Override
+        public String map(String value) throws Exception {
+            JSONObject json = new JSONObject(value);
+            String ipAddress = json.getString("sourceIPv4Address");
+
+            // Add date and time_inserted fields
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            Date now = new Date();
+            json.put("date", new SimpleDateFormat("yyyy-MM-dd").format(now));
+            json.put("time_inserted_ns", now.getTime() * 1_000_000);
+
+            try {
+                Date flowStartTime = sdf.parse(json.getString("flow_start_time"));
+                Date flowEndTime = sdf.parse(json.getString("flow_end_time"));
+                json.put("time_received_ns", flowEndTime.getTime() * 1_000_000);
+                json.put("flow_start_time", flowStartTime);
+                json.put("flow_end_time", flowEndTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                InetAddress ipAddressObj = InetAddress.getByName(ipAddress);
+                AsnResponse asnResponse = asnReader.asn(ipAddressObj);
+                CityResponse cityResponse = cityReader.city(ipAddressObj);
+                CountryResponse countryResponse = countryReader.country(ipAddressObj);
+
+                json.put("asn_number", asnResponse.getAutonomousSystemNumber());
+                json.put("asn_organization", asnResponse.getAutonomousSystemOrganization());
+                json.put("city_name", cityResponse.getCity().getName());
+                json.put("country_name", countryResponse.getCountry().getName());
+                json.put("latitude", cityResponse.getLocation().getLatitude());
+                json.put("longitude", cityResponse.getLocation().getLongitude());
+                json.put("iso_code", countryResponse.getCountry().getIsoCode());
+            } catch (GeoIp2Exception | IOException e) {
+                json.put("asn_number", 0);
+                json.put("asn_organization", "NA");
+                json.put("city_name", "NA");
+                json.put("country_name", "NA");
+                json.put("latitude", 0.0);
+                json.put("longitude", 0.0);
+                json.put("iso_code", "NA");
+            }
+
+            return json.toString();
+        }
     }
 }
