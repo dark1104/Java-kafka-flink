@@ -1,0 +1,219 @@
+[root@che172rocky96 ~]# kubectl get pods -n cattle-system -l app=rancher
+NAME                       READY   STATUS    RESTARTS   AGE
+rancher-56689b7d8c-nltpf   1/1     Running   0          34m
+rancher-56689b7d8c-w9fpd   1/1     Running   0          34m
+rancher-56689b7d8c-xsv2r   1/1     Running   1          34m
+[root@che172rocky96 ~]# kubectl describe pod rancher-56689b7d8c-nltpf -n cattle-system
+Name:                 rancher-56689b7d8c-nltpf
+Namespace:            cattle-system
+Priority:             1000000000
+Priority Class Name:  rancher-critical
+Service Account:      rancher
+Node:                 che172rocky96.che.aricent.com/192.168.91.172
+Start Time:           Fri, 11 Jul 2025 16:03:51 +0530
+Labels:               app=rancher
+                      pod-template-hash=56689b7d8c
+                      release=rancher
+Annotations:          <none>
+Status:               Running
+IP:                   10.42.0.40
+IPs:
+  IP:           10.42.0.40
+Controlled By:  ReplicaSet/rancher-56689b7d8c
+Containers:
+  rancher:
+    Container ID:  containerd://7c8832384c2df559f0884139bbe8d543ee2f95dbee29de0871d7a537295e6615
+    Image:         rancher/rancher:v2.11.3
+    Image ID:      docker.io/rancher/rancher@sha256:62ddf1d5357c08bda7c080b5c0909dc4d16d53995b34d6c245812b1307dd1969
+    Ports:         80/TCP, 6666/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Args:
+      --no-cacerts
+      --http-listen-port=80
+      --https-listen-port=443
+      --add-local=true
+    State:          Running
+      Started:      Fri, 11 Jul 2025 16:03:52 +0530
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:80/healthz delay=0s timeout=5s period=30s #success=1 #failure=5
+    Readiness:      http-get http://:80/healthz delay=0s timeout=5s period=30s #success=1 #failure=5
+    Startup:        http-get http://:80/healthz delay=0s timeout=5s period=10s #success=1 #failure=12
+    Environment:
+      CATTLE_NAMESPACE:             cattle-system
+      CATTLE_PEER_SERVICE:          rancher
+      CATTLE_BOOTSTRAP_PASSWORD:    <set to the key 'bootstrapPassword' in secret 'bootstrap-secret'>  Optional: false
+      IMPERATIVE_API_DIRECT:        true
+      IMPERATIVE_API_APP_SELECTOR:  rancher
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-j4xsw (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-j4xsw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 cattle.io/os=linux:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  35m                default-scheduler  Successfully assigned cattle-system/rancher-56689b7d8c-nltpf to che172rocky96.che.aricent.com
+  Normal   Pulled     35m                kubelet            Container image "rancher/rancher:v2.11.3" already present on machine
+  Normal   Created    35m                kubelet            Created container: rancher
+  Normal   Started    35m                kubelet            Started container rancher
+  Warning  Unhealthy  35m (x2 over 35m)  kubelet            Startup probe failed: Get "http://10.42.0.40:80/healthz": dial tcp 10.42.0.40:80: connect: connection refused
+[root@che172rocky96 ~]# kubectl describe pod rancher-56689b7d8c-w9fpd -n cattle-system
+Name:                 rancher-56689b7d8c-w9fpd
+Namespace:            cattle-system
+Priority:             1000000000
+Priority Class Name:  rancher-critical
+Service Account:      rancher
+Node:                 che172rocky96.che.aricent.com/192.168.91.172
+Start Time:           Fri, 11 Jul 2025 16:03:50 +0530
+Labels:               app=rancher
+                      pod-template-hash=56689b7d8c
+                      release=rancher
+Annotations:          <none>
+Status:               Running
+IP:                   10.42.0.38
+IPs:
+  IP:           10.42.0.38
+Controlled By:  ReplicaSet/rancher-56689b7d8c
+Containers:
+  rancher:
+    Container ID:  containerd://127bd6b5136cda586f43b125995964a3a1ffb62b3e4f9c6fd91f1ccbacc10460
+    Image:         rancher/rancher:v2.11.3
+    Image ID:      docker.io/rancher/rancher@sha256:62ddf1d5357c08bda7c080b5c0909dc4d16d53995b34d6c245812b1307dd1969
+    Ports:         80/TCP, 6666/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Args:
+      --no-cacerts
+      --http-listen-port=80
+      --https-listen-port=443
+      --add-local=true
+    State:          Running
+      Started:      Fri, 11 Jul 2025 16:03:51 +0530
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:80/healthz delay=0s timeout=5s period=30s #success=1 #failure=5
+    Readiness:      http-get http://:80/healthz delay=0s timeout=5s period=30s #success=1 #failure=5
+    Startup:        http-get http://:80/healthz delay=0s timeout=5s period=10s #success=1 #failure=12
+    Environment:
+      CATTLE_NAMESPACE:             cattle-system
+      CATTLE_PEER_SERVICE:          rancher
+      CATTLE_BOOTSTRAP_PASSWORD:    <set to the key 'bootstrapPassword' in secret 'bootstrap-secret'>  Optional: false
+      IMPERATIVE_API_DIRECT:        true
+      IMPERATIVE_API_APP_SELECTOR:  rancher
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-g5tsj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-g5tsj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 cattle.io/os=linux:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age   From               Message
+  ----     ------     ----  ----               -------
+  Normal   Scheduled  38m   default-scheduler  Successfully assigned cattle-system/rancher-56689b7d8c-w9fpd to che172rocky96.che.aricent.com
+  Normal   Pulled     38m   kubelet            Container image "rancher/rancher:v2.11.3" already present on machine
+  Normal   Created    38m   kubelet            Created container: rancher
+  Normal   Started    38m   kubelet            Started container rancher
+  Warning  Unhealthy  38m   kubelet            Startup probe failed: Get "http://10.42.0.38:80/healthz": dial tcp 10.42.0.38:80: connect: connection refused
+[root@che172rocky96 ~]# kubectl describe pod rancher-56689b7d8c-xsv2r -n cattle-system
+Name:                 rancher-56689b7d8c-xsv2r
+Namespace:            cattle-system
+Priority:             1000000000
+Priority Class Name:  rancher-critical
+Service Account:      rancher
+Node:                 che172rocky96.che.aricent.com/192.168.91.172
+Start Time:           Fri, 11 Jul 2025 16:03:51 +0530
+Labels:               app=rancher
+                      pod-template-hash=56689b7d8c
+                      release=rancher
+Annotations:          <none>
+Status:               Running
+IP:                   10.42.0.39
+IPs:
+  IP:           10.42.0.39
+Controlled By:  ReplicaSet/rancher-56689b7d8c
+Containers:
+  rancher:
+    Container ID:  containerd://bf37b4bee324094210f7351d368e49895d9d4083e6e7e5efe6e5cfc52da3cb87
+    Image:         rancher/rancher:v2.11.3
+    Image ID:      docker.io/rancher/rancher@sha256:62ddf1d5357c08bda7c080b5c0909dc4d16d53995b34d6c245812b1307dd1969
+    Ports:         80/TCP, 6666/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Args:
+      --no-cacerts
+      --http-listen-port=80
+      --https-listen-port=443
+      --add-local=true
+    State:          Running
+      Started:      Fri, 11 Jul 2025 16:04:27 +0530
+    Ready:          True
+    Restart Count:  1
+    Liveness:       http-get http://:80/healthz delay=0s timeout=5s period=30s #success=1 #failure=5
+    Readiness:      http-get http://:80/healthz delay=0s timeout=5s period=30s #success=1 #failure=5
+    Startup:        http-get http://:80/healthz delay=0s timeout=5s period=10s #success=1 #failure=12
+    Environment:
+      CATTLE_NAMESPACE:             cattle-system
+      CATTLE_PEER_SERVICE:          rancher
+      CATTLE_BOOTSTRAP_PASSWORD:    <set to the key 'bootstrapPassword' in secret 'bootstrap-secret'>  Optional: false
+      IMPERATIVE_API_DIRECT:        true
+      IMPERATIVE_API_APP_SELECTOR:  rancher
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jxz56 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-jxz56:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 cattle.io/os=linux:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  39m                default-scheduler  Successfully assigned cattle-system/rancher-56689b7d8c-xsv2r to che172rocky96.che.aricent.com
+  Normal   Pulled     38m (x2 over 39m)  kubelet            Container image "rancher/rancher:v2.11.3" already present on machine
+  Normal   Created    38m (x2 over 39m)  kubelet            Created container: rancher
+  Normal   Started    38m (x2 over 39m)  kubelet            Started container rancher
+  Warning  Unhealthy  38m (x5 over 39m)  kubelet            Startup probe failed: Get "http://10.42.0.39:80/healthz": dial tcp 10.42.0.39:80: connect: connection refused
+[root@che172rocky96 ~]#
