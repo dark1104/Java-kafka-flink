@@ -1,47 +1,21 @@
-[root@che172rocky96 ~]# kubectl -n cattle-system get ingress rancher -o yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  annotations:
-    cert-manager.io/issuer: rancher
-    cert-manager.io/issuer-kind: Issuer
-    field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher","hostname":"192.168.91.172.nip.io","path":"/","allNodes":false}]'
-    meta.helm.sh/release-name: rancher
-    meta.helm.sh/release-namespace: cattle-system
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  creationTimestamp: "2025-07-11T10:33:50Z"
-  generation: 1
-  labels:
-    app: rancher
-    app.kubernetes.io/managed-by: Helm
-    chart: rancher-2.11.3
-    heritage: Helm
-    release: rancher
   name: rancher
   namespace: cattle-system
-  resourceVersion: "17164"
-  uid: 43c88bb9-1638-40b0-81d2-abfb4b483e79
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   ingressClassName: traefik
   rules:
   - host: 192.168.91.172.nip.io
     http:
       paths:
-      - backend:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
           service:
             name: rancher
             port:
               number: 80
-        path: /
-        pathType: ImplementationSpecific
-  tls:
-  - hosts:
-    - 192.168.91.172.nip.io
-    secretName: tls-rancher-ingress
-status:
-  loadBalancer:
-    ingress:
-    - ip: 192.168.91.172
