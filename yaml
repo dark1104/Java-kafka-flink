@@ -19,3 +19,8 @@ spec:
             name: rancher
             port:
               number: 80
+
+
+
+kubectl patch ingress rancher -n cattle-system \
+  -p '{"spec":{"rules":[{"host":"192.168.91.172.nip.io","http":{"paths":[{"path":"/","pathType":"ImplementationSpecific","backend":{"service":{"name":"rancher","port":{"number":443}}}}]}}]}}'
