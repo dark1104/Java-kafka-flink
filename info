@@ -1,32 +1,30 @@
-[root@che172rocky96 ~]# kubectl describe ingress rancher -n cattle-system
-Name:             rancher
-Labels:           <none>
-Namespace:        cattle-system
-Address:          192.168.91.172
-Ingress Class:    traefik
-Default backend:  <default>
-Rules:
-  Host                   Path  Backends
-  ----                   ----  --------
-  192.168.91.172.nip.io
-                         /   rancher:80 (10.42.0.51:80,10.42.0.52:80,10.42.0.53:80)
-Annotations:             field.cattle.io/publicEndpoints:
-                           [{"addresses":["192.168.91.172"],"port":80,"protocol":"HTTP","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher","...
-                         nginx.ingress.kubernetes.io/backend-protocol: HTTP
-                         nginx.ingress.kubernetes.io/ssl-redirect: false
-Events:                  <none>
-[root@che172rocky96 ~]# curl -v http://192.168.91.172.nip.io
-*   Trying 192.168.91.172:80...
-* Connected to 192.168.91.172.nip.io (192.168.91.172) port 80 (#0)
-> GET / HTTP/1.1
-> Host: 192.168.91.172.nip.io
-> User-Agent: curl/7.76.1
-> Accept: */*
->
-* Mark bundle as not supporting multiuse
-< HTTP/1.1 502 Bad Gateway
-< Date: Fri, 11 Jul 2025 12:09:32 GMT
-< Content-Length: 11
-<
-* Connection #0 to host 192.168.91.172.nip.io left intact
-Bad Gateway[root@che172rocky96 ~]#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":80,"protocol":"HTTP","serviceName":"cattle-system:rancher    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"nginx.ingress.kubernetes.io/backend-protocol":"    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  creationTimestamp: "2025-07-11T11:00:01Z"
+  generation: 3
+  name: rancher
+  namespace: cattle-system
+  resourceVersion: "28207"
+  uid: 697fefed-6877-4d48-9f79-c2c79f1d171b
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: 192.168.91.172.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: rancher
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.91.172
