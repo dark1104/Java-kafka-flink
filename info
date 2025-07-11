@@ -1,25 +1,59 @@
-[root@che172rocky96 ~]# kubectl exec -it rancher-7bf8ccbc6b-d2l8f -n cattle-system -- curl -v http://rancher.cattle-system.svc.cluster.
-local:80
-* Host rancher.cattle-system.svc.cluster.local:80 was resolved.
-* IPv6: (none)
-* IPv4: 10.43.54.133
-*   Trying 10.43.54.133:80...
-* Connected to rancher.cattle-system.svc.cluster.local (10.43.54.133) port 80
-> GET / HTTP/1.1
-> Host: rancher.cattle-system.svc.cluster.local
-> User-Agent: curl/8.6.0
-> Accept: */*
+[root@che172rocky96 ~]# curl -vk https://192.168.91.172.nip.io
+*   Trying 192.168.91.172:443...
+* Connected to 192.168.91.172.nip.io (192.168.91.172) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+*  CAfile: /etc/pki/tls/certs/ca-bundle.crt
+* TLSv1.0 (OUT), TLS header, Certificate Status (22):
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS header, Certificate Status (22):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS header, Finished (20):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.2 (OUT), TLS header, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: CN=TRAEFIK DEFAULT CERT
+*  start date: Jul 11 12:40:39 2025 GMT
+*  expire date: Jul 11 12:40:39 2026 GMT
+*  issuer: CN=TRAEFIK DEFAULT CERT
+*  SSL certificate verify result: self-signed certificate (18), continuing anyway.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* Using Stream ID: 1 (easy handle 0x56224aaeb660)
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+> GET / HTTP/2
+> Host: 192.168.91.172.nip.io
+> user-agent: curl/7.76.1
+> accept: */*
 >
-< HTTP/1.1 302 Found
-< Content-Type: text/html; charset=utf-8
-< Location: https://rancher.cattle-system.svc.cluster.local/
-< Date: Fri, 11 Jul 2025 12:28:02 GMT
-< Content-Length: 71
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* Connection state changed (MAX_CONCURRENT_STREAMS == 250)!
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+< HTTP/2 502
+< content-length: 11
+< date: Fri, 11 Jul 2025 12:40:53 GMT
 <
-<a href="https://rancher.cattle-system.svc.cluster.local/">Found</a>.
-
-* Connection #0 to host rancher.cattle-system.svc.cluster.local left intact
-[root@che172rocky96 ~]# kubectl exec -it rancher-7bf8ccbc6b-d2l8f -n cattle-system -- curl -k https://rancher.cattle-system.svc.cluster
-.local:443
-{"type":"collection","links":{"self":"https://rancher.cattle-system.svc.cluster.local/"},"actions":{},"pagination":{"limit":1000,"total":4},"sort":{"order":"asc","reverse":"https://rancher.cattle-system.svc.cluster.local/?order=desc"},"resourceType":"apiRoot","data":[{"apiVersion":{"group":"meta.cattle.io","path":"/meta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.cattle-system.svc.cluster.local/meta/apiroots","root":"https://rancher.cattle-system.svc.cluster.local/meta","schemas":"https://rancher.cattle-system.svc.cluster.local/meta/schemas","self":"https://rancher.cattle-system.svc.cluster.local/meta","subscribe":"https://rancher.cattle-system.svc.cluster.local/meta/subscribe"},"type":"apiRoot"},{"apiVersion":{"group":"management.cattle.io","path":"/v3","version":"v3"},"baseType":"apiRoot","links":{"authConfigs":"https://rancher.cattle-system.svc.cluster.local/v3/authconfigs","cloudCredentials":"https://rancher.cattle-system.svc.cluster.local/v3/cloudcredentials","clusterRegistrationTokens":"https://rancher.cattle-system.svc.cluster.local/v3/clusterregistrationtokens","clusterRoleTemplateBindings":"https://rancher.cattle-system.svc.cluster.local/v3/clusterroletemplatebindings","clusterTemplateRevisions":"https://rancher.cattle-system.svc.cluster.local/v3/clustertemplaterevisions","clusterTemplates":"https://rancher.cattle-system.svc.cluster.local/v3/clustertemplates","clusters":"https://rancher.cattle-system.svc.cluster.local/v3/clusters","composeConfigs":"https://rancher.cattle-system.svc.cluster.local/v3/composeconfigs","dynamicSchemas":"https://rancher.cattle-system.svc.cluster.local/v3/dynamicschemas","etcdBackups":"https://rancher.cattle-system.svc.cluster.local/v3/etcdbackups","features":"https://rancher.cattle-system.svc.cluster.local/v3/features","fleetWorkspaces":"https://rancher.cattle-system.svc.cluster.local/v3/fleetworkspaces","globalRoleBindings":"https://rancher.cattle-system.svc.cluster.local/v3/globalrolebindings","globalRoles":"https://rancher.cattle-system.svc.cluster.local/v3/globalroles","groupMembers":"https://rancher.cattle-system.svc.cluster.local/v3/groupmembers","groups":"https://rancher.cattle-system.svc.cluster.local/v3/groups","kontainerDrivers":"https://rancher.cattle-system.svc.cluster.local/v3/kontainerdrivers","ldapConfigs":"https://rancher.cattle-system.svc.cluster.local/v3/ldapconfigs","managementSecrets":"https://rancher.cattle-system.svc.cluster.local/v3/managementsecrets","nodeDrivers":"https://rancher.cattle-system.svc.cluster.local/v3/nodedrivers","nodePools":"https://rancher.cattle-system.svc.cluster.local/v3/nodepools","nodeTemplates":"https://rancher.cattle-system.svc.cluster.local/v3/nodetemplates","nodes":"https://rancher.cattle-system.svc.cluster.local/v3/nodes","podSecurityAdmissionConfigurationTemplates":"https://rancher.cattle-system.svc.cluster.local/v3/podsecurityadmissionconfigurationtemplates","preferences":"https://rancher.cattle-system.svc.cluster.local/v3/preferences","principals":"https://rancher.cattle-system.svc.cluster.local/v3/principals","projectNetworkPolicies":"https://rancher.cattle-system.svc.cluster.local/v3/projectnetworkpolicies","projectRoleTemplateBindings":"https://rancher.cattle-system.svc.cluster.local/v3/projectroletemplatebindings","projects":"https://rancher.cattle-system.svc.cluster.local/v3/projects","rancherUserNotifications":"https://rancher.cattle-system.svc.cluster.local/v3/rancherusernotifications","rkeAddons":"https://rancher.cattle-system.svc.cluster.local/v3/rkeaddons","rkeK8sServiceOptions":"https://rancher.cattle-system.svc.cluster.local/v3/rkek8sserviceoptions","rkeK8sSystemImages":"https://rancher.cattle-system.svc.cluster.local/v3/rkek8ssystemimages","roleTemplates":"https://rancher.cattle-system.svc.cluster.local/v3/roletemplates","root":"https://rancher.cattle-system.svc.cluster.local/v3","samlTokens":"https://rancher.cattle-system.svc.cluster.local/v3/samltokens","self":"https://rancher.cattle-system.svc.cluster.local/v3","settings":"https://rancher.cattle-system.svc.cluster.local/v3/settings","subscribe":"https://rancher.cattle-system.svc.cluster.local/v3/subscribe","tokens":"https://rancher.cattle-system.svc.cluster.local/v3/tokens","users":"https://rancher.cattle-system.svc.cluster.local/v3/users"},"type":"apiRoot"},{"apiVersion":{"group":"cluster.cattle.io","path":"/v3/cluster","version":"v3"},"baseType":"apiRoot","links":{"apiServices":"https://rancher.cattle-system.svc.cluster.local/v3/cluster/apiservices","namespaces":"https://rancher.cattle-system.svc.cluster.local/v3/cluster/namespaces","persistentVolumes":"https://rancher.cattle-system.svc.cluster.local/v3/cluster/persistentvolumes","root":"https://rancher.cattle-system.svc.cluster.local/v3/cluster","self":"https://rancher.cattle-system.svc.cluster.local/v3/cluster","storageClasses":"https://rancher.cattle-system.svc.cluster.local/v3/cluster/storageclasses","subscribe":"https://rancher.cattle-system.svc.cluster.local/v3/cluster/subscribe"},"type":"apiRoot"},{"apiVersion":{"group":"project.cattle.io","path":"/v3/project","version":"v3"},"baseType":"apiRoot","links":{"basicAuths":"https://rancher.cattle-system.svc.cluster.local/v3/project/basicauths","certificates":"https://rancher.cattle-system.svc.cluster.local/v3/project/certificates","configMaps":"https://rancher.cattle-system.svc.cluster.local/v3/project/configmaps","cronJobs":"https://rancher.cattle-system.svc.cluster.local/v3/project/cronjobs","daemonSets":"https://rancher.cattle-system.svc.cluster.local/v3/project/daemonsets","deployments":"https://rancher.cattle-system.svc.cluster.local/v3/project/deployments","dnsRecords":"https://rancher.cattle-system.svc.cluster.local/v3/project/dnsrecords","dockerCredentials":"https://rancher.cattle-system.svc.cluster.local/v3/project/dockercredentials","horizontalPodAutoscalers":"https://rancher.cattle-system.svc.cluster.local/v3/project/horizontalpodautoscalers","ingresses":"https://rancher.cattle-system.svc.cluster.local/v3/project/ingresses","jobs":"https://rancher.cattle-system.svc.cluster.local/v3/project/jobs","namespacedBasicAuths":"https://rancher.cattle-system.svc.cluster.local/v3/project/namespacedbasicauths","namespacedCertificates":"https://rancher.cattle-system.svc.cluster.local/v3/project/namespacedcertificates","namespacedDockerCredentials":"https://rancher.cattle-system.svc.cluster.local/v3/project/namespaceddockercredentials","namespacedSecrets":"https://rancher.cattle-system.svc.cluster.local/v3/project/namespacedsecrets","namespacedServiceAccountTokens":"https://rancher.cattle-system.svc.cluster.local/v3/project/namespacedserviceaccounttokens","namespacedSshAuths":"https://rancher.cattle-system.svc.cluster.local/v3/project/namespacedsshauths","persistentVolumeClaims":"https://rancher.cattle-system.svc.cluster.local/v3/project/persistentvolumeclaims","pods":"https://rancher.cattle-system.svc.cluster.local/v3/project/pods","replicaSets":"https://rancher.cattle-system.svc.cluster.local/v3/project/replicasets","replicationControllers":"https://rancher.cattle-system.svc.cluster.local/v3/project/replicationcontrollers","root":"https://rancher.cattle-system.svc.cluster.local/v3/project","secrets":"https://rancher.cattle-system.svc.cluster.local/v3/project/secrets","self":"https://rancher.cattle-system.svc.cluster.local/v3/project","serviceAccountTokens":"https://rancher.cattle-system.svc.cluster.local/v3/project/serviceaccounttokens","services":"https://rancher.cattle-system.svc.cluster.local/v3/project/services","sshAuths":"https://rancher.cattle-system.svc.cluster.local/v3/project/sshauths","statefulSets":"https://rancher.cattle-system.svc.cluster.local/v3/project/statefulsets","subscribe":"https://rancher.cattle-system.svc.cluster.local/v3/project/subscribe","workloads":"https://rancher.cattle-system.svc.cluster.local/v3/project/workloads"},"type":"apiRoot"}]}
-[root@che172rocky96 ~]#
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* Connection #0 to host 192.168.91.172.nip.io left intact
+Bad Gateway[root@che172rocky96 ~]#
