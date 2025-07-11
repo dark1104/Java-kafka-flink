@@ -1,0 +1,27 @@
+These are the steps we might have to do for getting the system up and running.
+
+1. Install k3s https://docs.k3s.io/installation/configuration
+2. Install Rancher via helm chart https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster
+3. In Rancher UI:
+  Under App -> Repositories:
+    - Add bitnami chart url https://charts.bitnami.com/bitnami
+4. Under App -> Charts search and install the following apps:
+  - Clickhouse.
+    - By default it deployes 3 replicas. Need to configure to deploy only one replica (probably if possible all in one pod)
+  - flink
+  - kafka
+	Mongo DB
+	- Redis
+	
+5. Install rancher monitoring.
+6. Install Docker registry. Need to create a deployment yaml . Also need to configure k3s https://docs.k3s.io/installation/private-registry with registry url.
+7. May be need to install cert-manager (https://charts.jetstack.io helm repo)
+8. Need to create deployment yaml for application pods.
+
+Note:
+•	Bitnami charts provides configurations to select resource profiles (like small, nano, medium etc.) . In case of resource issues like cpu / memory , need to tweak the resource profiles of the applications while installing.
+
+We can refer 192.168.91.36 (root /admin@123)
+https://192.168.91.36/ (admin / admin1234567)
+
+There should not be much issue in these steps and should be simple to setup. I have faced lots of issues while setting up jenkins and CI/CD.
