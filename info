@@ -1,0 +1,244 @@
+[root@che172rocky96 ~]# kubectl get ingress rancher -n cattle-system -o yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":80,"protocol":"HTTP","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher","hostname":"192.168.91.172.nip.io","path":"/","allNodes":false}]'
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"nginx.ingress.kubernetes.io/backend-protocol":"HTTP","nginx.ingress.kubernetes.io/ssl-redirect":"false"},"name":"rancher","namespace":"cattle-system"},"spec":{"ingressClassName":"traefik","rules":[{"host":"192.168.91.172.nip.io","http":{"paths":[{"backend":{"service":{"name":"rancher","port":{"number":80}}},"path":"/","pathType":"ImplementationSpecific"}]}}]}}
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  creationTimestamp: "2025-07-11T11:00:01Z"
+  generation: 2
+  name: rancher
+  namespace: cattle-system
+  resourceVersion: "21625"
+  uid: 697fefed-6877-4d48-9f79-c2c79f1d171b
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: 192.168.91.172.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: rancher
+            port:
+              number: 443
+        path: /
+        pathType: ImplementationSpecific
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.91.172
+[root@che172rocky96 ~]# kubectl get svc rancher -n cattle-system
+NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+rancher   ClusterIP   10.43.54.133   <none>        80/TCP,443/TCP   72m
+[root@che172rocky96 ~]# kubectl get endpoints rancher -n cattle-system
+NAME      ENDPOINTS                                               AGE
+rancher   10.42.0.51:80,10.42.0.52:80,10.42.0.53:80 + 3 more...   72m
+[root@che172rocky96 ~]# kubectl logs traefik-c98fdf6fb-jjc4m -n kube-system
+2025-07-11T08:50:29Z INF Traefik version 3.3.6 built on 2025-04-18T09:18:47Z version=3.3.6
+2025-07-11T08:50:29Z INF Stats collection is enabled.
+2025-07-11T08:50:29Z INF Many thanks for contributing to Traefik's improvement by allowing us to receive anonymous information from your configuration.
+2025-07-11T08:50:29Z INF Help us improve Traefik by leaving this feature on :)
+2025-07-11T08:50:29Z INF More details on: https://doc.traefik.io/traefik/contributing/data-collection/
+2025-07-11T08:50:30Z INF Starting provider aggregator *aggregator.ProviderAggregator
+2025-07-11T08:50:30Z INF Starting provider *traefik.Provider
+2025-07-11T08:50:30Z INF Starting provider *ingress.Provider
+2025-07-11T08:50:30Z INF Starting provider *crd.Provider
+2025-07-11T08:50:30Z INF Starting provider *acme.ChallengeTLSALPN
+2025-07-11T08:50:30Z INF ingress label selector is: "" providerName=kubernetes
+2025-07-11T08:50:30Z INF Creating in-cluster Provider client providerName=kubernetes
+2025-07-11T08:50:30Z INF label selector is: "" providerName=kubernetescrd
+2025-07-11T08:50:30Z INF Creating in-cluster Provider client providerName=kubernetescrd
+2025-07-11T09:00:31Z WRN A new release of Traefik has been found: 3.4.4. Please consider updating.
+2025-07-11T09:03:47Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:03:47Z INF Updated ingress status ingress=rancher namespace=cattle-system
+2025-07-11T09:03:47Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:03:48Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:03:53Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:19Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:19Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:28Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:28Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:31Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:34Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:44Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:44Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:44Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:45Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:45Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T09:05:46Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:50Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:50Z INF Updated ingress status ingress=rancher namespace=cattle-system
+2025-07-11T10:33:50Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:51Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:51Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:52Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:52Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:53Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:53Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:57Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:57Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:33:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:10Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:10Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:10Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:10Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:10Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:11Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:11Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:12Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:25Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:25Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:47Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:52Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:52Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:34:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:28Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:28Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:30Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:33Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:37Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:37Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:37Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:37Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:37Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:37Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:38Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:38Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:38Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:43Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:44Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:44Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:46Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:49Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:49Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:49Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:50Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:50Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:50Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:35:58Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:10Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:12Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:13Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:13Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:15Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:21Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:21Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:23Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:26Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:28Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:43Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:55Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:55Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:57Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:57Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:59Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:59Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:36:59Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:41:18Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:46:25Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:46:47Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:51:32Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T10:56:38Z ERR Error configuring TLS error="secret cattle-system/tls-rancher-ingress does not exist" ingress=rancher namespace=cattle-system providerName=kubernetes
+2025-07-11T11:00:01Z INF Updated ingress status ingress=rancher namespace=cattle-system
+[root@che172rocky96 ~]# curl -v http://192.168.91.172:80
+*   Trying 192.168.91.172:80...
+* Connected to 192.168.91.172 (192.168.91.172) port 80 (#0)
+> GET / HTTP/1.1
+> Host: 192.168.91.172
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 404 Not Found
+< Content-Type: text/plain; charset=utf-8
+< X-Content-Type-Options: nosniff
+< Date: Fri, 11 Jul 2025 11:48:34 GMT
+< Content-Length: 19
+<
+404 page not found
+* Connection #0 to host 192.168.91.172 left intact
+[root@che172rocky96 ~]# curl -vk https://192.168.91.172:443
+*   Trying 192.168.91.172:443...
+* Connected to 192.168.91.172 (192.168.91.172) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+*  CAfile: /etc/pki/tls/certs/ca-bundle.crt
+* TLSv1.0 (OUT), TLS header, Certificate Status (22):
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS header, Certificate Status (22):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS header, Finished (20):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.2 (OUT), TLS header, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: CN=TRAEFIK DEFAULT CERT
+*  start date: Jul 11 11:20:53 2025 GMT
+*  expire date: Jul 11 11:20:53 2026 GMT
+*  issuer: CN=TRAEFIK DEFAULT CERT
+*  SSL certificate verify result: self-signed certificate (18), continuing anyway.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* Using Stream ID: 1 (easy handle 0x56362be82660)
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+> GET / HTTP/2
+> Host: 192.168.91.172
+> user-agent: curl/7.76.1
+> accept: */*
+>
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* Connection state changed (MAX_CONCURRENT_STREAMS == 250)!
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+< HTTP/2 404
+< content-type: text/plain; charset=utf-8
+< x-content-type-options: nosniff
+< content-length: 19
+< date: Fri, 11 Jul 2025 11:49:05 GMT
+<
+* TLSv1.2 (IN), TLS header, Unknown (23):
+404 page not found
+* Connection #0 to host 192.168.91.172 left intact
+[root@che172rocky96 ~]#
