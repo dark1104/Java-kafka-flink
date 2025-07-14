@@ -1,9 +1,9 @@
-  GNU nano 5.6.1                                             latest-ingress.yaml                                                       apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
     field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:ranc>    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"field.cattle.io/publicEndpoints":"[{\"addresse>    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+<o/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/ssl-redirect":"false","traefik.ingress.kubernetes.io/service.serverscheme":">    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     traefik.ingress.kubernetes.io/service.serverscheme: https
   creationTimestamp: "2025-07-11T11:00:01Z"
@@ -35,62 +35,43 @@ status:
 
 ##############################################
 
-[root@che172rocky96 ~]# curl -vk https://192.168.91.172.nip.io
-*   Trying 192.168.91.172:443...
-* Connected to 192.168.91.172.nip.io (192.168.91.172) port 443 (#0)
-* ALPN, offering h2
-* ALPN, offering http/1.1
-*  CAfile: /etc/pki/tls/certs/ca-bundle.crt
-* TLSv1.0 (OUT), TLS header, Certificate Status (22):
-* TLSv1.3 (OUT), TLS handshake, Client hello (1):
-* TLSv1.2 (IN), TLS header, Certificate Status (22):
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.2 (IN), TLS header, Finished (20):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.3 (IN), TLS handshake, Certificate (11):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.3 (IN), TLS handshake, CERT verify (15):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.3 (IN), TLS handshake, Finished (20):
-* TLSv1.2 (OUT), TLS header, Finished (20):
-* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
-* TLSv1.2 (OUT), TLS header, Unknown (23):
-* TLSv1.3 (OUT), TLS handshake, Finished (20):
-* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
-* ALPN, server accepted to use h2
-* Server certificate:
-*  subject: CN=TRAEFIK DEFAULT CERT
-*  start date: Jul 11 13:17:11 2025 GMT
-*  expire date: Jul 11 13:17:11 2026 GMT
-*  issuer: CN=TRAEFIK DEFAULT CERT
-*  SSL certificate verify result: self-signed certificate (18), continuing anyway.
-* Using HTTP2, server supports multi-use
-* Connection state changed (HTTP/2 confirmed)
-* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
-* TLSv1.2 (OUT), TLS header, Unknown (23):
-* TLSv1.2 (OUT), TLS header, Unknown (23):
-* TLSv1.2 (OUT), TLS header, Unknown (23):
-* Using Stream ID: 1 (easy handle 0x559f36357660)
-* TLSv1.2 (OUT), TLS header, Unknown (23):
-> GET / HTTP/2
-> Host: 192.168.91.172.nip.io
-> user-agent: curl/7.76.1
-> accept: */*
->
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* Connection state changed (MAX_CONCURRENT_STREAMS == 250)!
-* TLSv1.2 (OUT), TLS header, Unknown (23):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* TLSv1.2 (IN), TLS header, Unknown (23):
-< HTTP/2 502
-< content-length: 11
-< date: Mon, 14 Jul 2025 10:18:19 GMT
-<
-* TLSv1.2 (IN), TLS header, Unknown (23):
-* Connection #0 to host 192.168.91.172.nip.io left intact
-Bad Gateway
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: rancher
+    meta.helm.sh/release-namespace: cattle-system
+  creationTimestamp: "2025-07-11T10:33:50Z"
+  labels:
+    app: rancher
+    app.kubernetes.io/managed-by: Helm
+    chart: rancher-2.11.3
+    heritage: Helm
+    release: rancher
+  name: rancher
+  namespace: cattle-system
+  resourceVersion: "14809"
+  uid: b29c3787-3078-4f51-8adf-73475b0dbe9a
+spec:
+  clusterIP: 10.43.54.133
+  clusterIPs:
+  - 10.43.54.133
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https-internal
+    port: 443
+    protocol: TCP
+    targetPort: 444
+  selector:
+    app: rancher
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
