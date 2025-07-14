@@ -1,3 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:ranc>    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"nginx.ingress.kubernetes.io/backend-protocol":>    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    traefik.ingress.kubernetes.io/service.serverscheme: https
+  creationTimestamp: "2025-07-11T11:00:01Z"
+  generation: 8
+  name: rancher
+  namespace: cattle-system
+  resourceVersion: "39556"
+  uid: 697fefed-6877-4d48-9f79-c2c79f1d171b
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: 192.168.91.172.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: rancher
+            port:
+              number: 443
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - 191.168.91.172.nip.io
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.91.172
+####################################################################
+
 [root@che172rocky96 ~]# curl -vk https://192.168.91.172.nip.io
 *   Trying 192.168.91.172:443...
 * Connected to 192.168.91.172.nip.io (192.168.91.172) port 443 (#0)
@@ -25,8 +61,8 @@
 * ALPN, server accepted to use h2
 * Server certificate:
 *  subject: CN=TRAEFIK DEFAULT CERT
-*  start date: Jul 11 12:40:39 2025 GMT
-*  expire date: Jul 11 12:40:39 2026 GMT
+*  start date: Jul 11 13:17:11 2025 GMT
+*  expire date: Jul 11 13:17:11 2026 GMT
 *  issuer: CN=TRAEFIK DEFAULT CERT
 *  SSL certificate verify result: self-signed certificate (18), continuing anyway.
 * Using HTTP2, server supports multi-use
@@ -35,7 +71,7 @@
 * TLSv1.2 (OUT), TLS header, Unknown (23):
 * TLSv1.2 (OUT), TLS header, Unknown (23):
 * TLSv1.2 (OUT), TLS header, Unknown (23):
-* Using Stream ID: 1 (easy handle 0x56224aaeb660)
+* Using Stream ID: 1 (easy handle 0x55c95753f660)
 * TLSv1.2 (OUT), TLS header, Unknown (23):
 > GET / HTTP/2
 > Host: 192.168.91.172.nip.io
@@ -52,7 +88,7 @@
 * TLSv1.2 (IN), TLS header, Unknown (23):
 < HTTP/2 502
 < content-length: 11
-< date: Fri, 11 Jul 2025 12:40:53 GMT
+< date: Mon, 14 Jul 2025 10:04:49 GMT
 <
 * TLSv1.2 (IN), TLS header, Unknown (23):
 * Connection #0 to host 192.168.91.172.nip.io left intact
