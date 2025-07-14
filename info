@@ -1,77 +1,74 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:ranc>    kubectl.kubernetes.io/last-applied-configuration: |
-<o/backend-protocol":"HTTPS","nginx.ingress.kubernetes.io/ssl-redirect":"false","traefik.ingress.kubernetes.io/service.serverscheme":">    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    traefik.ingress.kubernetes.io/service.serverscheme: https
-  creationTimestamp: "2025-07-11T11:00:01Z"
-  generation: 9
-  name: rancher
-  namespace: cattle-system
-  resourceVersion: "645398"
-  uid: 697fefed-6877-4d48-9f79-c2c79f1d171b
-spec:
-  ingressClassName: traefik
-  rules:
-  - host: 192.168.91.172.nip.io
-    http:
-      paths:
-      - backend:
-          service:
-            name: rancher
-            port:
-              number: 443
-        path: /
-        pathType: Prefix
-  tls:
-  - hosts:
-    - 192.168.91.172.nip.io
-status:
-  loadBalancer:
-    ingress:
-    - ip: 192.168.91.172
+[root@che172rocky96 ~]# curl -vk https://localhost:8443
+*   Trying ::1:8443...
+* Connected to localhost (::1) port 8443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+*  CAfile: /etc/pki/tls/certs/ca-bundle.crt
+* TLSv1.0 (OUT), TLS header, Certificate Status (22):
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS header, Certificate Status (22):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS header, Finished (20):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.2 (OUT), TLS header, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: O=dynamic; CN=dynamic
+*  start date: Jul 11 10:34:10 2025 GMT
+*  expire date: Jul 11 12:29:26 2026 GMT
+*  issuer: O=dynamiclistener-org; CN=dynamiclistener-ca@1752230050
+*  SSL certificate verify result: self-signed certificate in certificate chain (19), continuing anyway.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* Using Stream ID: 1 (easy handle 0x563c43453660)
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+> GET / HTTP/2
+> Host: localhost:8443
+> user-agent: curl/7.76.1
+> accept: */*
+>
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* Connection state changed (MAX_CONCURRENT_STREAMS == 250)!
+* TLSv1.2 (OUT), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* TLSv1.2 (IN), TLS header, Unknown (23):
+< HTTP/2 200
+< cache-control: no-cache, no-store, must-revalidate
+< content-type: application/json
+< expires: Wed 24 Feb 1982 18:42:00 GMT
+< x-api-cattle-auth: false
+< x-api-schemas: https://localhost:8443/meta/schemas
+< x-content-type-options: nosniff
+< date: Mon, 14 Jul 2025 10:49:40 GMT
+<
+* TLSv1.2 (IN), TLS header, Unknown (23):
+{"type":"collection","links":{"self":"https://localhost:8443/"},"actions":{},"pagination":{"limit":1000,"total":4},"sort":{"order":"asc","reverse":"https://localhost:8443/?order=desc"},"resourceType":"apiRoot","data":[{"apiVersion":{"group":"meta.cattle.io","path":"/meta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://localhost:8443/meta/apiroots","root":"https://localhost:8443/meta","schemas":"https://localhost:8443/meta/schemas","self":"https://localhost:8443/meta","subscribe":"https://localhost:8443/meta/subscribe"},"type":"apiRoot"},{"apiVersion":{"group":"management.cattle.io","path":"/v3","version":"v3"},"baseType":"apiRoot","links":{"authConfigs":"https://localhost:8443/v3/authconfigs","cloudCredentials":"https://localhost:8443/v3/cloudcredentials","clusterRegistrationTokens":"https://localhost:8443/v3/clusterregistrationtokens","clusterRoleTemplateBindings":"https://localhost:8443/v3/clusterroletemplatebindings","clusterTemplateRevisions":"https://localhost:8443/v3/clustertemplaterevisions","clusterTemplates":"https://localhost:8443/v3/clustertemplates","clusters":"https://localhost:8443/v3/clusters","composeConfigs":"https://localhost:8443/v3/composeconfigs","dynamicSchemas":"https://localhost:8443/v3/dynamicschemas","etcdBackups":"https://localhost:8443/v3/etcdbackups","features":"https://localhost:8443/v3/features","fleetWorkspaces":"https://localhost:8443/v3/fleetworkspaces","globalRoleBindings":"https://localhost:8443/v3/globalrolebindings","globalRoles":"https://localhost:8443/v3/globalroles","groupMembers":"https://localhost:8443/v3/groupmembers","groups":"https://localhost:8443/v3/groups","kontainerDrivers":"https://localhost:8443/v3/kontainerdrivers","ldapConfigs":"https://localhost:8443/v3/ldapconfigs","managementSecrets":"https://localhost:8443/v3/managementsecrets","nodeDrivers":"https://localhost:8443/v3/nodedrivers","nodePools":"https://localhost:8443/v3/nodepools","nodeTemplates":"https://localhost:8443/v3/nodetemplates","nodes":"https://localhost:8443/v3/nodes","podSecurityAdmissionConfigurationTemplates":"https://localhost:8443/v3/podsecurityadmissionconfigurationtemplates","preferences":"https://localhost:8443/v3/preferences","principals":"https://localhost:8443/v3/principals","projectNetworkPolicies":"https://localhost:8443/v3/projectnetworkpolicies","projectRoleTemplateBindings":"https://localhost:8443/v3/projectroletemplatebindings","projects":"https://localhost:8443/v3/projects","rancherUserNotifications":"https://localhost:8443/v3/rancherusernotifications","rkeAddons":"https://localhost:8443/v3/rkeaddons","rkeK8sServiceOptions":"https://localhost:8443/v3/rkek8sserviceoptions","rkeK8sSystemImages":"https://localhost:8443/v3/rkek8ssystemimages","roleTemplates":"https://localhost:8443/v3/roletemplates","root":"https://localhost:8443/v3","samlTokens":"https://localhost:8443/v3/samltokens","self":"https://localhost:8443/v3","settings":"https://localhost:8443/v3/settings","subscribe":"https://localhost:8443/v3/subscribe","tokens":"https://localhost:8443/v3/tokens","users":"https://localhost:8443/v3/users"},"type":"apiRoot"},{"apiVersion":{"group":"cluster.cattle.io","path":"/v3/cluster","version":"v3"},"baseType":"apiRoot","links":{"apiServices":"https://localhost:8443/v3/cluster/apiservices","namespaces":"https://localhost:8443/v3/cluster/namespaces","persistentVolumes":"https://localhost:8443/v3/cluster/persistentvolumes","root":"https://localhost:8443/v3/cluster","self":"https://localhost:8443/v3/cluster","storageClasses":"https://localhost:8443/v3/cluster/storageclasses","subscribe":"https://localhost:8443/v3/cluster/subscribe"},"type":"apiRoot"},{"apiVersion":{"group":"project.cattle.io","path":"/v3/project","version":"v3"},"baseType":"apiRoot","links":{"basicAuths":"https://localhost:8443/v3/project/basicauths","certificates":"https://localhost:8443/v3/project/certificates","configMaps":"https://localhost:8443/v3/project/configmaps","cronJobs":"https://localhost:8443/v3/project/cronjobs","daemonSets":"https://localhost:8443/v3/project/daemonsets","deployments":"https://localhost:8443/v3/project/deployments","dnsRecords":"https://localhost:8443/v3/project/dnsrecords","dockerCredentials":"https://localhost:8443/v3/project/dockercredentials","horizontalPodAutoscalers":"https://localhost:8443/v3/project/horizontalpodautoscalers","ingresses":"https://localhost:8443/v3/project/ingresses","jobs":"https://localhost:8443/v3/project/jobs","namespacedBasicAuths":"https://localhost:8443/v3/project/namespacedbasicauths","namespacedCertificates":"https://localhost:8443/v3/project/namespacedcertificates","namespacedDockerCredentials":"https://localhost:8443/v3/project/namespaceddockercredentials","namespacedSecrets":"https://localhost:8443/v3/project/namespacedsecrets","namespacedServiceAccountTokens":"https://localhost:8443/v3/project/namespacedserviceaccounttokens","namespacedSshAuths":"https://localhost:8443/v3/project/namespacedsshauths","persistentVolumeClaims":"https://localhost:8443/v3/project/persistentvolumeclaims","pods":"https://localhost:8443/v3/project/pods","replicaSets":"https://localhost:8443/v3/project/replicasets","replicationControllers":"https://localhost:8443/v3/project/replicationcontrollers","root":"https://localhost:8443/v3/project","secrets":"https://localhost:8443/v3/project/secrets","self":"https://localhost:8443/v3/project","serviceAccountTokens":"https://localhost:8443/v3/project/serviceaccounttokens","services":"https://localhost:8443/v3/project/services","sshAuths":"https://localhost:8443/v3/project/sshauths","statefulSets":"https://localhost:8443/v3/project/statefulsets","subscribe":"https://localhost:8443/v3/project/subscribe","workloads":"https://localhost:8443/v3/project/workloads"},"type":"apiRoot"}]}
+* TLSv1.2 (IN), TLS header, Unknown (23):
+* Connection #0 to host localhost left intact
+[root@che172rocky96 ~]# kubectl get svc,ingress -n cattle-system -o wide
+NAME                               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+service/imperative-api-extension   ClusterIP   10.43.165.254   <none>        6666/TCP         3d    app=rancher
+service/rancher                    ClusterIP   10.43.54.133    <none>        80/TCP,443/TCP   3d    app=rancher
+service/rancher-webhook            ClusterIP   10.43.144.239   <none>        443/TCP          3d    app=rancher-webhook
 
-##############################################
-
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    meta.helm.sh/release-name: rancher
-    meta.helm.sh/release-namespace: cattle-system
-  creationTimestamp: "2025-07-11T10:33:50Z"
-  labels:
-    app: rancher
-    app.kubernetes.io/managed-by: Helm
-    chart: rancher-2.11.3
-    heritage: Helm
-    release: rancher
-  name: rancher
-  namespace: cattle-system
-  resourceVersion: "14809"
-  uid: b29c3787-3078-4f51-8adf-73475b0dbe9a
-spec:
-  clusterIP: 10.43.54.133
-  clusterIPs:
-  - 10.43.54.133
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  - name: https-internal
-    port: 443
-    protocol: TCP
-    targetPort: 444
-  selector:
-    app: rancher
-  sessionAffinity: None
-  type: ClusterIP
-status:
-  loadBalancer: {}
+NAME                                CLASS     HOSTS                   ADDRESS          PORTS     AGE
+ingress.networking.k8s.io/rancher   traefik   192.168.91.172.nip.io   192.168.91.172   80, 443   2d23h
+[root@che172rocky96 ~]#
