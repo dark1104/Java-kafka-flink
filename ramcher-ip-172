@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rancher-ip
+  namespace: cattle-system
+  annotations:
+    cert-manager.io/issuer: rancher
+    cert-manager.io/issuer-kind: Issuer
+    field.cattle.io/publicEndpoints: '[{"addresses":["192.168.91.172"],"port":80,"protocol":"HTTP","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher-ip","path":"/","allNodes":false},{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher-ip","path":"/","allNodes":false}]'
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: 192.168.91.172.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: rancher
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - 192.168.91.172.nip.io
+    secretName: tls-rancher-ingress
