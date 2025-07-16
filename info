@@ -1,72 +1,84 @@
-[root@che172rocky96 ~]# kubectl -n cattle-system describe ingress rancher-ip
-Name:             rancher-ip
-Labels:           app=rancher
-                  app.kubernetes.io/managed-by=Helm
-                  chart=rancher-2.11.2
-                  heritage=Helm
-                  release=rancher
-Namespace:        cattle-system
-Address:          192.168.91.172
-Ingress Class:    traefik
-Default backend:  <default>
-TLS:
-  tls-rancher-ingress terminates 192.168.91.172.nip.io
-Rules:
-  Host                   Path  Backends
-  ----                   ----  --------
-  192.168.91.172.nip.io
-                         /   rancher:443 (10.42.0.51:444,10.42.0.52:444,10.42.0.53:444)
-Annotations:             cert-manager.io/issuer: rancher
-                         cert-manager.io/issuer-kind: Issuer
-                         field.cattle.io/publicEndpoints:
-                           [{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher-...
-                         meta.helm.sh/release-name: rancher
-                         meta.helm.sh/release-namespace: cattle-system
-                         nginx.ingress.kubernetes.io/proxy-connect-timeout: 30
-                         nginx.ingress.kubernetes.io/proxy-read-timeout: 1800
-                         nginx.ingress.kubernetes.io/proxy-send-timeout: 1800
-Events:
-  Type    Reason             Age   From                       Message
-  ----    ------             ----  ----                       -------
-  Normal  CreateCertificate  46m   cert-manager-ingress-shim  Successfully created Certificate "tls-rancher-ingress"
-[root@che172rocky96 ~]# kubectl -n cattle-system get svc rancher -o yaml
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    meta.helm.sh/release-name: rancher
-    meta.helm.sh/release-namespace: cattle-system
-  creationTimestamp: "2025-07-11T10:33:50Z"
-  labels:
-    app: rancher
-    app.kubernetes.io/managed-by: Helm
-    chart: rancher-2.11.3
-    heritage: Helm
-    release: rancher
-  name: rancher
-  namespace: cattle-system
-  resourceVersion: "857976"
-  uid: b29c3787-3078-4f51-8adf-73475b0dbe9a
-spec:
-  clusterIP: 10.43.54.133
-  clusterIPs:
-  - 10.43.54.133
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  - name: https
-    port: 443
-    protocol: TCP
-    targetPort: 444
-  selector:
-    app: rancher
-  sessionAffinity: None
-  type: ClusterIP
-status:
-  loadBalancer: {}
+[root@che172rocky96 ~]# openssl s_client -connect 192.168.91.172:443 -servername 192.168.91.172.nip.io
+Connecting to 192.168.91.172
+CONNECTED(00000003)
+depth=0 CN=192.168.91.172.nip.io
+verify error:num=18:self-signed certificate
+verify return:1
+depth=0 CN=192.168.91.172.nip.io
+verify return:1
+---
+Certificate chain
+ 0 s:CN=192.168.91.172.nip.io
+   i:CN=192.168.91.172.nip.io
+   a:PKEY: rsaEncryption, 2048 (bit); sigalg: RSA-SHA256
+   v:NotBefore: Jul 16 09:48:29 2025 GMT; NotAfter: Jul 16 09:48:29 2026 GMT
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDITCCAgmgAwIBAgIUJYiqxFrvv3lBKjUUnwJ5ru3i7KowDQYJKoZIhvcNAQEL
+BQAwIDEeMBwGA1UEAwwVMTkyLjE2OC45MS4xNzIubmlwLmlvMB4XDTI1MDcxNjA5
+NDgyOVoXDTI2MDcxNjA5NDgyOVowIDEeMBwGA1UEAwwVMTkyLjE2OC45MS4xNzIu
+bmlwLmlvMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiV7nNV2Fk0tI
+sW114Y7Gc+hTNECRBhLO2cH/d74MwrzNxoKPYF2RCOUetiQR83J55rAzrMnLyotW
+uppPoyU481/haxTvxwiYRM2XNhZzloQ3lid3Nc6JxYE/iyh0uOHgrsue33pb16Cr
+VjAxYA1L8myKSCSjmFLwF5QKorvuYqzE47zWjwOPcRVOod1mub4+orYZJr+dd7Iw
+uJL/ACLz1uqmmGpQKvAzw23LKzV7ctJw4pESEry9eoqjpkhW3qRiTKEXhRJghFJ8
+jnnx3aQMXe3LbR5OVQt6wAM2siKQ7BWtLGzBW7TCz1jndjn46lhCOJxBGLV4vRP3
+QVRYhM6ajwIDAQABo1MwUTAdBgNVHQ4EFgQUFXtW3BXQCorVlcej4YzvHOj4mo0w
+HwYDVR0jBBgwFoAUFXtW3BXQCorVlcej4YzvHOj4mo0wDwYDVR0TAQH/BAUwAwEB
+/zANBgkqhkiG9w0BAQsFAAOCAQEAhIpTYT5S32IUhVHbMOQTxw9M6F8jVVRaFb49
+REoCYYF1HAjztd18rjgeDYCU8Y6dfGloGpKkJEXXG5Oe9+c+pOoV4EPWYC6MxU5C
+p7Q9g1+gNbpuhPLLAbRrLjcgXKTWeKay6/PyRtIdBfBb9pao7so6tQKlaIs6gM/e
+zDXftF1pLDM00P8Tdpk1fmi4GSlsdgxXsS2l5k3iXJ5Nno70nA26qXWhd0BPCS4f
++9Ey3cQJjgD7Yb8x5swAEkq5/yWbMWs4XJiP46QQEwg5nWN/os8PWq135amaHK8l
+N0HUSwn+vX2DVyC23QeTutrpqIUFq/29+ogO96cyI90rBNfvIw==
+-----END CERTIFICATE-----
+subject=CN=192.168.91.172.nip.io
+issuer=CN=192.168.91.172.nip.io
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: RSA-PSS
+Server Temp Key: X25519, 253 bits
+---
+SSL handshake has read 1345 bytes and written 396 bytes
+Verification error: self-signed certificate
+---
+New, TLSv1.3, Cipher is TLS_AES_128_GCM_SHA256
+Server public key is 2048 bit
+This TLS version forbids renegotiation.
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 18 (self-signed certificate)
+---
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_128_GCM_SHA256
+    Session-ID: 52A5A8C3D8FB569A955483081CC68D286C142A53C5CA59328FD5E1AA0A05257B
+    Session-ID-ctx:
+    Resumption PSK: 2A35679A1BD1EF3E827CE05F51D26887A30D03EAA9F06E54D90D8EC80B62F311
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 604800 (seconds)
+    TLS session ticket:
+    0000 - 6a 0d 00 0f e9 59 48 e6-8e 72 87 4c 8f b2 5e 19   j....YH..r.L..^.
+    0010 - fe d0 5d 10 ad 25 02 7d-41 db bc 8e b6 37 14 08   ..]..%.}A....7..
+    0020 - 60 9a 6d 43 25 ca 94 d1-47 38 bf d0 fd 5d 57 48   `.mC%...G8...]WH
+    0030 - 46 1d 3c b0 8a fa b3 ae-81 2c 31 7e 2a 6c 2e dc   F.<......,1~*l..
+    0040 - 6d a4 a3 b9 d7 3d ff 6e-da 99 34 db 79 83 a0 19   m....=.n..4.y...
+    0050 - b9 8f 31 e2 c8 2a 82 01-04 c6 fd 3e dd 64 e8 af   ..1..*.....>.d..
+    0060 - 49 4f f8 a1 20 e0 67 ec-aa                        IO.. .g..
+
+    Start Time: 1752660676
+    Timeout   : 7200 (sec)
+    Verify return code: 18 (self-signed certificate)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+closed
