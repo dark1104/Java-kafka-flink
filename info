@@ -1,3 +1,34 @@
+[root@che172rocky96 ~]# kubectl -n cattle-system describe ingress rancher-ip
+Name:             rancher-ip
+Labels:           app=rancher
+                  app.kubernetes.io/managed-by=Helm
+                  chart=rancher-2.11.2
+                  heritage=Helm
+                  release=rancher
+Namespace:        cattle-system
+Address:          192.168.91.172
+Ingress Class:    traefik
+Default backend:  <default>
+TLS:
+  tls-rancher-ingress terminates 192.168.91.172.nip.io
+Rules:
+  Host                   Path  Backends
+  ----                   ----  --------
+  192.168.91.172.nip.io
+                         /   rancher:443 (10.42.0.51:444,10.42.0.52:444,10.42.0.53:444)
+Annotations:             cert-manager.io/issuer: rancher
+                         cert-manager.io/issuer-kind: Issuer
+                         field.cattle.io/publicEndpoints:
+                           [{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher-...
+                         meta.helm.sh/release-name: rancher
+                         meta.helm.sh/release-namespace: cattle-system
+                         nginx.ingress.kubernetes.io/proxy-connect-timeout: 30
+                         nginx.ingress.kubernetes.io/proxy-read-timeout: 1800
+                         nginx.ingress.kubernetes.io/proxy-send-timeout: 1800
+Events:
+  Type    Reason             Age   From                       Message
+  ----    ------             ----  ----                       -------
+  Normal  CreateCertificate  46m   cert-manager-ingress-shim  Successfully created Certificate "tls-rancher-ingress"
 [root@che172rocky96 ~]# kubectl -n cattle-system get svc rancher -o yaml
 apiVersion: v1
 kind: Service
@@ -39,35 +70,3 @@ spec:
   type: ClusterIP
 status:
   loadBalancer: {}
-[root@che172rocky96 ~]# kubectl -n cattle-system describe ingress rancher-ip
-Name:             rancher-ip
-Labels:           app=rancher
-                  app.kubernetes.io/managed-by=Helm
-                  chart=rancher-2.11.2
-                  heritage=Helm
-                  release=rancher
-Namespace:        cattle-system
-Address:          192.168.91.172
-Ingress Class:    traefik
-Default backend:  <default>
-TLS:
-  tls-rancher-ingress terminates 192.168.91.172.nip.io
-Rules:
-  Host                   Path  Backends
-  ----                   ----  --------
-  192.168.91.172.nip.io
-                         /   rancher:80 (10.42.0.51:80,10.42.0.52:80,10.42.0.53:80)
-Annotations:             cert-manager.io/issuer: rancher
-                         cert-manager.io/issuer-kind: Issuer
-                         field.cattle.io/publicEndpoints:
-                           [{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher-...
-                         meta.helm.sh/release-name: rancher
-                         meta.helm.sh/release-namespace: cattle-system
-                         nginx.ingress.kubernetes.io/proxy-connect-timeout: 30
-                         nginx.ingress.kubernetes.io/proxy-read-timeout: 1800
-                         nginx.ingress.kubernetes.io/proxy-send-timeout: 1800
-Events:
-  Type    Reason             Age   From                       Message
-  ----    ------             ----  ----                       -------
-  Normal  CreateCertificate  40m   cert-manager-ingress-shim  Successfully created Certificate "tls-rancher-ingress"
-[root@che172rocky96 ~]#
