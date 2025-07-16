@@ -1,85 +1,73 @@
-✅ Excellent! This confirms that Rancher is fully functional and serving traffic correctly on port 8443 inside the container, and your Kubernetes Service is correctly routing it from Service Port 443 → Target Port 444 → Container Port 8443.
-
-Now let’s ensure that your Traefik Ingress is configured correctly to forward HTTPS traffic to Rancher’s internal service — so external clients like browsers or curl https://192.168.91.172.nip.io get a valid response.
-
-
----
-
-✅ Step-by-Step: Fix Your Rancher Ingress for Traefik
-
-Here is the correct working Ingress YAML to match your setup:
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+[root@che172rocky96 ~]# kubectl -n cattle-system get svc rancher -o yaml
+apiVersion: v1
+kind: Service
 metadata:
+  annotations:
+    meta.helm.sh/release-name: rancher
+    meta.helm.sh/release-namespace: cattle-system
+  creationTimestamp: "2025-07-11T10:33:50Z"
+  labels:
+    app: rancher
+    app.kubernetes.io/managed-by: Helm
+    chart: rancher-2.11.3
+    heritage: Helm
+    release: rancher
   name: rancher
   namespace: cattle-system
-  annotations:
-    traefik.ingress.kubernetes.io/service.serverscheme: https
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  resourceVersion: "857976"
+  uid: b29c3787-3078-4f51-8adf-73475b0dbe9a
 spec:
-  ingressClassName: traefik
-  rules:
-    - host: 192.168.91.172.nip.io
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: rancher
-                port:
-                  number: 443
-  tls:
-    - hosts:
-        - 192.168.91.172.nip.io
-
-> 🔁 Explanation:
-
-service.serverscheme: https tells Traefik to use HTTPS when proxying to your backend Rancher service.
-
-Your Rancher service is:
-
-Exposed as ClusterIP
-
-Port 443 → targetPort: 444 (inside container is listening on 8443, confirmed).
-
-
-
-
-
-
----
-
-✅ Apply This Ingress Cleanly
-
-If you’ve previously applied a conflicting version, run:
-
-kubectl delete ingress rancher -n cattle-system
-kubectl apply -f rancher-ingress.yaml
-
-
----
-
-🔍 Test Again from Outside
-
-curl -vk https://192.168.91.172.nip.io
-
-✅ You should now get HTTP/2 200 or HTML response from Rancher UI — instead of 502.
-
-
----
-
-Bonus: Access Rancher Web UI
-
-Open a browser and visit:
-
-https://192.168.91.172.nip.io
-
-It may warn about self-signed cert, just proceed to Rancher.
-
-
----
-
-If you’d like, I can also generate a complete working rancher-ingress.yaml for copy-paste. Let me know!
+  clusterIP: 10.43.54.133
+  clusterIPs:
+  - 10.43.54.133
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 444
+  selector:
+    app: rancher
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+[root@che172rocky96 ~]# kubectl -n cattle-system describe ingress rancher-ip
+Name:             rancher-ip
+Labels:           app=rancher
+                  app.kubernetes.io/managed-by=Helm
+                  chart=rancher-2.11.2
+                  heritage=Helm
+                  release=rancher
+Namespace:        cattle-system
+Address:          192.168.91.172
+Ingress Class:    traefik
+Default backend:  <default>
+TLS:
+  tls-rancher-ingress terminates 192.168.91.172.nip.io
+Rules:
+  Host                   Path  Backends
+  ----                   ----  --------
+  192.168.91.172.nip.io
+                         /   rancher:80 (10.42.0.51:80,10.42.0.52:80,10.42.0.53:80)
+Annotations:             cert-manager.io/issuer: rancher
+                         cert-manager.io/issuer-kind: Issuer
+                         field.cattle.io/publicEndpoints:
+                           [{"addresses":["192.168.91.172"],"port":443,"protocol":"HTTPS","serviceName":"cattle-system:rancher","ingressName":"cattle-system:rancher-...
+                         meta.helm.sh/release-name: rancher
+                         meta.helm.sh/release-namespace: cattle-system
+                         nginx.ingress.kubernetes.io/proxy-connect-timeout: 30
+                         nginx.ingress.kubernetes.io/proxy-read-timeout: 1800
+                         nginx.ingress.kubernetes.io/proxy-send-timeout: 1800
+Events:
+  Type    Reason             Age   From                       Message
+  ----    ------             ----  ----                       -------
+  Normal  CreateCertificate  40m   cert-manager-ingress-shim  Successfully created Certificate "tls-rancher-ingress"
+[root@che172rocky96 ~]#
