@@ -1,0 +1,117 @@
+Table name: enriched_flows
+
+
+-- Core Identity Fields
+    flow_id String,
+    flow_key String,
+ 
+    -- Metadata fields (flexible String types for ingestion compatibility)
+    customer_id String DEFAULT '',
+    flow_format LowCardinality(String) DEFAULT 'IPFIX',
+    exporter_id String DEFAULT '',
+    observation_domain_id String DEFAULT '',
+    template_id String DEFAULT '',
+ 
+    -- Network fields (bidirectional normalized)
+    source_ip String,
+    source_port UInt16,
+    destination_ip String,
+    destination_port UInt16,
+    protocol UInt8,
+ 
+    -- Exporter information
+    sampler_address String DEFAULT '',
+    sequence_number UInt64 DEFAULT 0,
+ 
+    -- Client-Server identification (normalized view)
+    client_ip String DEFAULT '',
+    client_port UInt16 DEFAULT 0,
+    server_ip String DEFAULT '',
+    server_port UInt16 DEFAULT 0,
+    flow_direction String DEFAULT '',        -- CLIENT_TO_SERVER, SERVER_TO_CLIENT, BIDIRECTIONAL
+    direction_confidence Float32 DEFAULT 0.0,  -- 0.0-1.0 confidence score
+    direction_reason String DEFAULT '',      -- PORT_BASED, TCP_STATE, IP_CLASS, etc.
+ 
+    -- Timing fields
+    first_seen DateTime64(3) DEFAULT now64(),
+    last_seen DateTime64(3) DEFAULT now64(),
+    duration Float32 DEFAULT 0,
+    enrichment_timestamp DateTime64(3) DEFAULT now64(),
+    processing_latency UInt16 DEFAULT 0,
+ 
+    -- Traffic metrics (MAIN REFERENCE for bidirectional flows)
+    total_packets UInt64 DEFAULT 0,
+    total_bytes UInt64 DEFAULT 0,
+    forward_packets UInt64 DEFAULT 0,
+    forward_bytes UInt64 DEFAULT 0,
+    reverse_packets UInt64 DEFAULT 0,
+    reverse_bytes UInt64 DEFAULT 0,
+ 
+    -- Protocol fields
+    tcp_flags UInt16 DEFAULT 0,
+    tos UInt8 DEFAULT 0,
+ 
+    -- Enrichment data
+    source_dns String DEFAULT '',
+    destination_dns String DEFAULT '',
+    application String DEFAULT '',
+ 
+    -- GeoIP Enrichment (Source)
+    source_geo_country String DEFAULT '',
+    source_geo_country_code String DEFAULT '',
+    source_geo_region String DEFAULT '',
+    source_geo_region_code String DEFAULT '',
+    source_geo_city String DEFAULT '',
+    source_geo_latitude Float64 DEFAULT 0.0,
+    source_geo_longitude Float64 DEFAULT 0.0,
+    source_geo_timezone String DEFAULT '',
+    source_geo_isp String DEFAULT '',
+    source_geo_organization String DEFAULT '',
+    source_geo_asn UInt32 DEFAULT 0,
+    source_geo_asn_organization String DEFAULT '',
+ 
+    -- GeoIP Enrichment (Destination)
+    destination_geo_country String DEFAULT '',
+    destination_geo_country_code String DEFAULT '',
+    destination_geo_region String DEFAULT '',
+    destination_geo_region_code String DEFAULT '',
+    destination_geo_city String DEFAULT '',
+    destination_geo_latitude Float64 DEFAULT 0.0,
+    destination_geo_longitude Float64 DEFAULT 0.0,
+    destination_geo_timezone String DEFAULT '',
+    destination_geo_isp String DEFAULT '',
+    destination_geo_organization String DEFAULT '',
+    destination_geo_asn UInt32 DEFAULT 0,
+    destination_geo_asn_organization String DEFAULT '',
+ 
+    -- IPAM Enrichment (Source)
+    source_ipam_network_name String DEFAULT '',
+    source_ipam_network_range String DEFAULT '',
+    source_ipam_subnet String DEFAULT '',
+    source_ipam_vlan UInt16 DEFAULT 0,
+    source_ipam_department String DEFAULT '',
+    source_ipam_owner String DEFAULT '',
+    source_ipam_description String DEFAULT '',
+    source_ipam_location String DEFAULT '',
+    source_ipam_environment String DEFAULT '',
+    source_ipam_criticality String DEFAULT '',
+ 
+    -- IPAM Enrichment (Destination)
+    destination_ipam_network_name String DEFAULT '',
+    destination_ipam_network_range String DEFAULT '',
+    destination_ipam_subnet String DEFAULT '',
+    destination_ipam_vlan UInt16 DEFAULT 0,
+    destination_ipam_department String DEFAULT '',
+    destination_ipam_owner String DEFAULT '',
+    destination_ipam_description String DEFAULT '',
+    destination_ipam_location String DEFAULT '',
+    destination_ipam_environment String DEFAULT '',
+    destination_ipam_criticality String DEFAULT '',
+ 
+ 
+    -- KEPT: ONLY custom_fields for all custom data
+    custom_fields Map(String, String) DEFAULT map(),
+ 
+    -- System fields
+    ingestion_time DateTime64(3) DEFAULT now64(),
+    data_version UInt8 DEFAULT 1
