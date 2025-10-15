@@ -1,0 +1,142 @@
+# IPFIX Simulator Configuration
+# This file defines the simulator's behavior
+
+# Export parameters
+export:
+  collector_ip: "127.27.0.4"  # Collector IP address
+  collector_port: 4739       # IPFIX default port
+
+# Simulation parameters
+simulation_speed: 10.0  # 10x real-time
+start_time: "2025-03-30T08:00:00"
+end_time: "2025-03-30T20:00:00"
+
+# Traffic profiles
+traffic_profiles:
+  # Web server traffic profile
+  - name: "web_servers"
+    source_networks:
+      - "192.168.0.0/16"
+      - "172.16.0.0/12"
+      - "10.0.0.0/8"
+    destination_networks:
+      - "203.0.113.0/24"  # Web server subnet
+    protocols:
+      - 6  # TCP
+    port_ranges:
+      source: [1024, 65535]
+      destination: [80, 443]
+    flow_size_distribution:
+      type: "lognormal"
+      mean: 8.5  # ~5KB
+      sigma: 1.2
+    packet_size_distribution:
+      type: "normal"
+      mean: 800
+      sigma: 300
+      min: 64
+      max: 1500
+    flow_duration_distribution:
+      type: "lognormal"
+      mean: 7.5  # ~1.8s
+      sigma: 1.5
+    time_pattern:
+      type: "diurnal"  # Daily pattern
+      flows_per_minute: 5000
+
+  # Database traffic profile
+  - name: "database_traffic"
+    source_networks:
+      - "203.0.113.0/24"  # Web server subnet
+    destination_networks:
+      - "198.51.100.0/24"  # Database subnet
+    protocols:
+      - 6  # TCP
+    port_ranges:
+      source: [1024, 65535]
+      destination: [3306, 5432]
+    flow_size_distribution:
+      type: "lognormal"
+      mean: 7.2  # ~1.3KB
+      sigma: 0.8
+    flow_duration_distribution:
+      type: "lognormal"
+      mean: 5.0  # ~150ms
+      sigma: 1.0
+    time_pattern:
+      type: "diurnal"
+      flows_per_minute: 2000
+
+  # Email traffic profile
+  - name: "email_traffic"
+    source_networks:
+      - "192.168.0.0/16"
+      - "172.16.0.0/12"
+    destination_networks:
+      - "192.0.2.0/24"  # Email server subnet
+    protocols:
+      - 6  # TCP
+    port_ranges:
+      source: [1024, 65535]
+      destination: [25, 587, 993]
+    flow_size_distribution:
+      type: "lognormal"
+      mean: 9.5  # ~13KB
+      sigma: 2.0
+    time_pattern:
+      type: "weekly"
+      flows_per_minute: 500
+
+  # Backup traffic profile
+  - name: "backup_traffic"
+    source_networks:
+      - "198.51.100.0/24"  # Database subnet
+      - "203.0.113.0/24"  # Web server subnet
+    destination_networks:
+      - "203.0.114.0/24"  # Backup subnet
+    protocols:
+      - 6  # TCP
+    port_ranges:
+      source: [1024, 65535]
+      destination: [22, 873]  # SSH, rsync
+    flow_size_distribution:
+      type: "lognormal"
+      mean: 14.0  # ~1.2MB
+      sigma: 2.5
+    time_pattern:
+      type: "constant"
+      flows_per_minute: 20
+
+# Anomalies configuration
+anomalies:
+  anomalies:
+    # DDoS attack scenario
+    - type: "volumetric_ddos"
+      start_time: "2025-03-30T14:00:00"
+      end_time: "2025-03-30T14:30:00"
+      target_ip: "203.0.113.10"
+      target_port: 80
+      flow_count: 200  # Flows per second
+
+    # Port scan scenario
+    - type: "port_scan"
+      start_time: "2025-03-30T10:15:00"
+      end_time: "2025-03-30T10:20:00"
+      source_ip: "172.16.42.123"
+      target_ip: "198.51.100.5"
+      port_count: 100
+
+    # Data exfiltration scenario
+    - type: "data_exfiltration"
+      start_time: "2025-03-30T16:45:00"
+      end_time: "2025-03-30T17:00:00"
+      source_ip: "192.168.1.42"
+      destination_ip: "209.85.200.100"
+
+    # Unusual protocol usage
+    - type: "unusual_protocol"
+      start_time: "2025-03-30T18:30:00"
+      end_time: "2025-03-30T19:00:00"
+      source_ip: "192.168.15.20"
+      destination_ip: "198.51.100.42"
+      protocol: 47  # GRE protocol
