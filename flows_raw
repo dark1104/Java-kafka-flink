@@ -1,0 +1,48 @@
+DESCRIBE TABLE flows_raw
+
+Query id: 210da48e-7ad8-45b2-8f6b-3514cfb692bf
+
+    ┌─name───────────────────────┬─type──────────┬─default_type─┬─default_expression─┬─comment─┬─codec_expression─┬─ttl_expression─┐
+ 1. │ date                       │ String        │ DEFAULT      │ '1970-01-01'       │         │                  │                │
+ 2. │ time_inserted_ns           │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+ 3. │ time_received_ns           │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+ 4. │ user_name                  │ String        │ DEFAULT      │ ''                 │         │                  │                │
+ 5. │ email                      │ String        │ DEFAULT      │ ''                 │         │                  │                │
+ 6. │ device_type                │ String        │ DEFAULT      │ ''                 │         │                  │                │
+ 7. │ source_ipv4_address        │ String        │ DEFAULT      │ ''                 │         │                  │                │
+ 8. │ destination_ipv4_address   │ String        │ DEFAULT      │ ''                 │         │                  │                │
+ 9. │ protocol_identifier        │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+10. │ protocol_name              │ String        │ DEFAULT      │ ''                 │         │                  │                │
+11. │ source_transport_port      │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+12. │ destination_transport_port │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+13. │ octet_delta_count          │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+14. │ packet_delta_count         │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+15. │ flow_start_milliseconds    │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+16. │ flow_end_milliseconds      │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+17. │ mac_source                 │ String        │ DEFAULT      │ ''                 │         │                  │                │
+18. │ mac_destination            │ String        │ DEFAULT      │ ''                 │         │                  │                │
+19. │ application_name           │ String        │ DEFAULT      │ ''                 │         │                  │                │
+20. │ http_url                   │ String        │ DEFAULT      │ ''                 │         │                  │                │
+21. │ https_url_certificate      │ String        │ DEFAULT      │ ''                 │         │                  │                │
+22. │ datalink_vlan              │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+23. │ bytes_accumulated          │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+24. │ tcp_retransmits            │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+25. │ tcp_rst                    │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+26. │ tcp_fin                    │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+27. │ bytes_per_packet           │ Float64       │ DEFAULT      │ 0.                 │         │                  │                │
+28. │ flow_duration_ms           │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+29. │ flow_direction             │ String        │ DEFAULT      │ ''                 │         │                  │                │
+30. │ profile_name               │ String        │ DEFAULT      │ ''                 │         │                  │                │
+31. │ asn_number                 │ Int64         │ DEFAULT      │ 0                  │         │                  │                │
+32. │ asn_organization           │ String        │ DEFAULT      │ ''                 │         │                  │                │
+33. │ city_name                  │ String        │ DEFAULT      │ ''                 │         │                  │                │
+34. │ country_name               │ String        │ DEFAULT      │ ''                 │         │                  │                │
+35. │ latitude                   │ Float64       │ DEFAULT      │ 0.                 │         │                  │                │
+36. │ longitude                  │ Float64       │ DEFAULT      │ 0.                 │         │                  │                │
+37. │ iso_code                   │ String        │ DEFAULT      │ ''                 │         │                  │                │
+38. │ flow_start_time            │ DateTime64(3) │ DEFAULT      │ now64(3)           │         │                  │                │
+39. │ flow_end_time              │ DateTime64(3) │ DEFAULT      │ now64(3)           │         │                  │                │
+40. │ additional_data            │ String        │ DEFAULT      │ 'NA'               │         │                  │                │
+    └────────────────────────────┴───────────────┴──────────────┴────────────────────┴─────────┴──────────────────┴────────────────┘
+
+40 rows in set. Elapsed: 0.002 sec.
